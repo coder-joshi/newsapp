@@ -3,9 +3,9 @@ import NewsItem from "./NewsItem";
 // import data from "../../sampleOutput.json";
 
 function News() {
-  const [data, setData] = useState(null);
+  const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalResults, setTotalResults] = useState(0);
+  const [hasNext, setHasNext] = useState(true);
   const pageSize = 6;
 
   async function getData(pageNo) {
@@ -14,9 +14,19 @@ function News() {
     );
     let parsedData = await res.json();
 
-    setData(parsedData);
-    setTotalResults(parsedData.totalResults);
-    console.log(parsedData);
+    const validArticles = (parsedData.articles || [])
+      .filter(
+        (item) =>
+          item.title !== "Removed" && item.url !== "https://removed.com",
+      )
+      .slice(0, pageSize);
+
+      
+    setArticles(validArticles);
+    console.log(validArticles.length);
+    setHasNext(validArticles.length >= pageSize);
+
+    // console.log(parsedData);
   }
 
   useEffect(() => {
@@ -24,7 +34,7 @@ function News() {
   }, []);
 
   function handleNextClick() {
-    if (page < Math.ceil(totalResults / pageSize)) {
+    if (hasNext) {
       getData(page + 1);
       setPage(page + 1);
     }
@@ -43,31 +53,24 @@ function News() {
         NewsMonkey - Top Headlines
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-5 max-w-7xl mx-auto justify-items-center">
-        {data &&
-          data.articles
-            .filter(
-              (item) =>
-                item.title !== "[Removed]" &&
-                item.url !== "https://removed.com",
-            )
-            .slice(0, pageSize)
-            .map((item) => {
-              return (
-                <NewsItem
-                  key={item.url}
-                  imgUrl={item.urlToImage}
-                  title={
-                    item.title ? item.title.slice(0, 15) : "No title available"
-                  }
-                  desc={
-                    item.description
-                      ? item.description.slice(0, 100)
-                      : "No Description available"
-                  }
-                  url={item.url}
-                />
-              );
-            })}
+        {articles &&
+          articles.map((item) => {
+            return (
+              <NewsItem
+                key={item.url}
+                imgUrl={item.urlToImage}
+                title={
+                  item.title ? item.title.slice(0, 15) : "No title available"
+                }
+                desc={
+                  item.description
+                    ? item.description.slice(0, 100)
+                    : "No Description available"
+                }
+                url={item.url}
+              />
+            );
+          })}
       </div>
       <div className="flex flex-wrap items-center justify-around gap-5 md:gap-12 m-5">
         <button
@@ -78,11 +81,9 @@ function News() {
         >
           ⏮️Previous
         </button>
-        <div className="page-numbering">
-          {page}/{Math.ceil(totalResults / pageSize)}
-        </div>
+        <div className="page-numbering">{page}</div>
         <button
-          disabled={page >= Math.ceil(totalResults / pageSize)}
+          disabled={!hasNext}
           type="button"
           className="px-6 py-2 active:scale-95 transition bg-blue-500/20 rounded text-blue-500 text-sm font-medium cursor-pointer"
           onClick={handleNextClick}
