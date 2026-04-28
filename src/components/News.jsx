@@ -6,11 +6,11 @@ function News() {
   const [data, setData] = useState(null);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  const pageSize = 16;
+  const pageSize = 6;
 
   async function getData(pageNo) {
     let res = await fetch(
-      `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=735a26f2a35145d583ec98b0a0177b51&page=${pageNo}&pageSize=${pageSize}`,
+      `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=735a26f2a35145d583ec98b0a0177b51&page=${pageNo}&pageSize=${pageSize * 2}`,
     );
     let parsedData = await res.json();
 
@@ -39,25 +39,35 @@ function News() {
 
   return (
     <>
-      <div className="grid grid-cols-3 p-5">
+      <div className="flex text-center justify-center text-4xl p-5">
+        NewsMonkey - Top Headlines
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-5 max-w-7xl mx-auto justify-items-center">
         {data &&
-          data.articles.map((item) => {
-            return (
-              <NewsItem
-                key={item.url}
-                imgUrl={item.urlToImage}
-                title={
-                  item.title ? item.title.slice(0, 15) : "No title available"
-                }
-                desc={
-                  item.description
-                    ? item.description.slice(0, 100)
-                    : "No Description available"
-                }
-                url={item.url}
-              />
-            );
-          })}
+          data.articles
+            .filter(
+              (item) =>
+                item.title !== "[Removed]" &&
+                item.url !== "https://removed.com",
+            )
+            .slice(0, pageSize)
+            .map((item) => {
+              return (
+                <NewsItem
+                  key={item.url}
+                  imgUrl={item.urlToImage}
+                  title={
+                    item.title ? item.title.slice(0, 15) : "No title available"
+                  }
+                  desc={
+                    item.description
+                      ? item.description.slice(0, 100)
+                      : "No Description available"
+                  }
+                  url={item.url}
+                />
+              );
+            })}
       </div>
       <div className="flex flex-wrap items-center justify-around gap-5 md:gap-12 m-5">
         <button
@@ -68,6 +78,9 @@ function News() {
         >
           ⏮️Previous
         </button>
+        <div className="page-numbering">
+          {page}/{Math.ceil(totalResults / pageSize)}
+        </div>
         <button
           disabled={page >= Math.ceil(totalResults / pageSize)}
           type="button"
