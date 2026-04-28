@@ -6,7 +6,7 @@ function News() {
   const [data, setData] = useState(null);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  const pageSize = 20;
+  const pageSize = 16;
 
   async function getData(pageNo) {
     let res = await fetch(
@@ -16,7 +16,7 @@ function News() {
 
     setData(parsedData);
     setTotalResults(parsedData.totalResults);
-    // console.log(parsedData);
+    console.log(parsedData);
   }
 
   useEffect(() => {
@@ -31,9 +31,9 @@ function News() {
   }
 
   function handlePrevClick() {
-    if(page>1){
-      getData(page-1);
-      setPage(page-1);
+    if (page > 1) {
+      getData(page - 1);
+      setPage(page - 1);
     }
   }
 
@@ -61,7 +61,7 @@ function News() {
       </div>
       <div className="flex flex-wrap items-center justify-around gap-5 md:gap-12 m-5">
         <button
-          disabled={page<=1}
+          disabled={page <= 1}
           type="button"
           className="px-6 py-2 active:scale-95 transition bg-blue-500/20 rounded text-blue-500 text-sm font-medium cursor-pointer"
           onClick={handlePrevClick}
@@ -69,7 +69,7 @@ function News() {
           ⏮️Previous
         </button>
         <button
-          disabled={page>=Math.ceil(totalResults/pageSize)}
+          disabled={page >= Math.ceil(totalResults / pageSize)}
           type="button"
           className="px-6 py-2 active:scale-95 transition bg-blue-500/20 rounded text-blue-500 text-sm font-medium cursor-pointer"
           onClick={handleNextClick}
