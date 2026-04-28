@@ -17,7 +17,7 @@ function NewsItem({ imgUrl, title, desc, url }) {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
-      className="relative w-80 h-96 rounded-xl p-0.5 bg-white backdrop-blur-md text-gray-800 overflow-hidden shadow-lg"
+      className="relative w-80 h-96 rounded-xl p-0.5 bg-white backdrop-blur-md text-gray-800 overflow-hidden shadow-lg m-2"
     >
       {visible && (
         <div
@@ -26,9 +26,13 @@ function NewsItem({ imgUrl, title, desc, url }) {
         />
       )}
 
-      <div className="relative z-10 bg-white p-6 h-full w-full rounded-[10px] flex flex-col items-center justify-center text-center">
+      <div className="relative z-10 bg-white p-6 mb-1.5 h-full w-full rounded-[10px] flex flex-col items-center justify-center text-center">
         <img
-          src={imgUrl}
+          src={
+            imgUrl
+              ? imgUrl
+              : "https://image.cnbcfm.com/api/v1/image/108297154-1777062115103-gettyimages-2272297273-AFP_A8WW982.jpeg?v=1777062217&w=1920&h=1080"
+          }
           alt="Profile Avatar"
           className="w-24 h-24 rounded-full shadow-md my-4"
         />
