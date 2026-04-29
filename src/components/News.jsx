@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import NewsItem from "./NewsItem";
 import Spinner from "./Spinner";
 import InfiniteScroll from "react-infinite-scroll-component";
+const apiKey = import.meta.env.VITE_API_KEY;
 
 // import data from "../../sampleOutput.json";
 
@@ -18,7 +19,7 @@ function News({ category }) {
   async function getData(pageNo) {
     setLoading(true);
     let res = await fetch(
-      `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=735a26f2a35145d583ec98b0a0177b51&page=${pageNo}&pageSize=${pageSize}`,
+      `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${apiKey}&page=${pageNo}&pageSize=${pageSize}`,
     );
     let parsedData = await res.json();
     setLoading(false);
@@ -26,7 +27,7 @@ function News({ category }) {
     const validArticles = (parsedData.articles || []).filter(
       (item) => item.title !== "Removed" && item.url !== "https://removed.com",
     );
-
+    //Code for loading more articles
     setArticles((prev) => [...prev, ...validArticles]); // APPEND, don't replace
     setHasNext(pageNo * pageSize < parsedData.totalResults);
   }
