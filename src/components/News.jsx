@@ -21,7 +21,6 @@ function News() {
       )
       .slice(0, pageSize);
 
-      
     setArticles(validArticles);
     console.log(validArticles.length);
     setHasNext(validArticles.length >= pageSize);
@@ -49,47 +48,49 @@ function News() {
 
   return (
     <>
-      <div className="flex text-center justify-center text-4xl p-5">
-        NewsMonkey - Top Headlines
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-5 max-w-7xl mx-auto justify-items-center">
-        {articles &&
-          articles.map((item) => {
-            return (
-              <NewsItem
-                key={item.url}
-                imgUrl={item.urlToImage}
-                title={
-                  item.title ? item.title.slice(0, 15) : "No title available"
-                }
-                desc={
-                  item.description
-                    ? item.description.slice(0, 100)
-                    : "No Description available"
-                }
-                url={item.url}
-              />
-            );
-          })}
-      </div>
-      <div className="flex flex-wrap items-center justify-around gap-5 md:gap-12 m-5">
-        <button
-          disabled={page <= 1}
-          type="button"
-          className="px-6 py-2 active:scale-95 transition bg-blue-500/20 rounded text-blue-500 text-sm font-medium cursor-pointer"
-          onClick={handlePrevClick}
-        >
-          ⏮️Previous
-        </button>
-        <div className="page-numbering">{page}</div>
-        <button
-          disabled={!hasNext}
-          type="button"
-          className="px-6 py-2 active:scale-95 transition bg-blue-500/20 rounded text-blue-500 text-sm font-medium cursor-pointer"
-          onClick={handleNextClick}
-        >
-          Next⏭️
-        </button>
+      <div className="news">
+        <div className="flex text-center justify-center text-4xl p-5">
+          NewsMonkey - Top Headlines
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-5 max-w-7xl mx-auto justify-items-center">
+          {articles &&
+            articles.map((item) => {
+              return (
+                <NewsItem
+                  key={item.url}
+                  imgUrl={item.urlToImage}
+                  title={
+                    item.title ? item.title.slice(0, 15) : "No title available"
+                  }
+                  desc={
+                    item.description
+                      ? item.description.slice(0, 100)
+                      : "No Description available"
+                  }
+                  url={item.url}
+                />
+              );
+            })}
+        </div>
+        <div className="flex flex-wrap items-center justify-around gap-5 md:gap-12 m-5">
+          <button
+            disabled={page <= 1}
+            type="button"
+            className="px-6 py-2 active:scale-95 transition bg-blue-500/20 rounded text-blue-500 text-sm font-medium cursor-pointer"
+            onClick={handlePrevClick}
+          >
+            ⏮️Previous
+          </button>
+          <div className="page-numbering">{page}</div>
+          <button
+            disabled={!hasNext}
+            type="button"
+            className="px-6 py-2 active:scale-95 transition bg-blue-500/20 rounded text-blue-500 text-sm font-medium cursor-pointer"
+            onClick={handleNextClick}
+          >
+            Next⏭️
+          </button>
+        </div>
       </div>
     </>
   );
