@@ -96,6 +96,7 @@ function News({ category }) {
                 );
               })}
           </div>
+          {/* {console.log(hasNext)} */}
         </InfiniteScroll>
         {/* <div className="flex flex-wrap items-center justify-around gap-5 md:gap-12 m-5">
           <button
