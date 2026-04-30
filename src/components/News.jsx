@@ -73,6 +73,7 @@ function News({ category }) {
           next={fetchMore}
           hasMore={hasNext}
           loader={<Spinner />}
+          style={{ overflow: "visible" }}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-5 max-w-7xl mx-auto justify-items-center">
             {articles &&
