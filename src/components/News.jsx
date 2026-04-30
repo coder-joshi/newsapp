@@ -6,7 +6,7 @@ const apiKey = import.meta.env.VITE_API_KEY;
 
 // import data from "../../sampleOutput.json";
 
-function News({ category }) {
+function News({ category, setProgress }) {
   const [articles, setArticles] = useState([]);
   // const [page, setPage] = useState(1);
   const pageRef = useRef(1);
@@ -17,19 +17,22 @@ function News({ category }) {
 
   // Change getData to accept page and append
   async function getData(pageNo) {
+    if (pageNo === 1) setProgress(10);
     setLoading(true);
     let res = await fetch(
       `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${apiKey}&page=${pageNo}&pageSize=${pageSize}`,
     );
+    if (pageNo === 1) setProgress(30);
     let parsedData = await res.json();
+    if (pageNo === 1) setProgress(70);
     setLoading(false);
-
     const validArticles = (parsedData.articles || []).filter(
       (item) => item.title !== "Removed" && item.url !== "https://removed.com",
     );
     //Code for loading more articles
     setArticles((prev) => [...prev, ...validArticles]); // APPEND, don't replace
     setHasNext(pageNo * pageSize < parsedData.totalResults);
+    if (pageNo === 1) setProgress(100);
   }
 
   // useEffect(() => {
